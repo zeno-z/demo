@@ -21,13 +21,14 @@ import gc
 import os
 import os, sys, io, logging, traceback, streamlit as st
 
-# 让前端显示详细错误
-st.set_option("client.showErrorDetails", True)
-
-# 收敛线程占用，避免 Cloud 资源紧绷导致中断
-os.environ.setdefault("OMP_NUM_THREADS", "1")
-os.environ.setdefault("OPENBLAS_NUM_THREADS", "1")
-os.environ.setdefault("MKL_NUM_THREADS", "1")
+import os
+# ---- limit threads to avoid Cloud kill ----
+os.environ["OMP_NUM_THREADS"] = "1"
+os.environ["OPENBLAS_NUM_THREADS"] = "1"
+os.environ["MKL_NUM_THREADS"] = "1"
+os.environ["VECLIB_MAXIMUM_THREADS"] = "1"
+os.environ["NUMEXPR_NUM_THREADS"] = "1"
+os.environ["XGBOOST_NUM_THREADS"] = "1"  # 兼容 xgboost
 
 # 简单的异常上报工具
 def report_exception(e: Exception, where: str = ""):
@@ -736,7 +737,17 @@ def main():
             
             # Train button
             if st.button("🚀 Train Models", type="primary"):
-                train_models(df, df_raw, models, lookback, lookahead)
+                try:
+                    train_models(df, df_raw, models, lookback, lookahead)
+                except Exception as e:
+                    import traceback, datetime, pathlib
+                    tb = traceback.format_exc()
+                    st.error(f"Training failed: {e}")
+                    st.code(tb)
+                    # 写到临时文件，方便在 Cloud Logs 里下载
+                    p = pathlib.Path("/tmp/last_error.log")
+                    p.write_text(f"[{datetime.datetime.now()}]\n{tb}")
+                    st.info(f"Saved error log to {p}")
             # —— 新增：基于最近一次预测结果的可交互投资分析 ——
             if st.session_state.manual_result is not None:
                 
