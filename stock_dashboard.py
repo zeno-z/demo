@@ -18,6 +18,15 @@ import joblib
 from datetime import datetime, timedelta
 import json
 import gc
+import os
+
+# —— 强制限制数值库的并行线程，避免过度占用 CPU/内存 ——
+os.environ.setdefault("OMP_NUM_THREADS", "1")
+os.environ.setdefault("OPENBLAS_NUM_THREADS", "1")
+os.environ.setdefault("MKL_NUM_THREADS", "1")
+os.environ.setdefault("VECLIB_MAXIMUM_THREADS", "1")
+os.environ.setdefault("NUMEXPR_NUM_THREADS", "1")
+os.environ.setdefault("XGB_NUM_THREADS", "1")  # 供 xgboost 读取
 
 warnings.filterwarnings('ignore')
 
