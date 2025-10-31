@@ -386,7 +386,7 @@ def train_xgboost_matching_attachment2(X_train, y_train, X_val, y_val, X_test, l
         reg_alpha=0, reg_lambda=260, gamma=10,
         grow_policy="lossguide", max_leaves=2, max_bin=32,
         objective="reg:squarederror", random_state=42,
-        tree_method="hist", n_jobs=0
+        tree_method="hist", n_jobs=1
     )
     
     try:
