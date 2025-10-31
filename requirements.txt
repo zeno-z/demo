@@ -1,3 +1,8 @@
+--only-binary=:all:
+pip==24.0
+setuptools<70
+wheel
+
 streamlit==1.37.1
 pandas==2.2.2
 numpy==1.26.4
