@@ -1699,4 +1699,9 @@ def show_roi_calculator_tab(df):
         
 # Run the app
 if __name__ == "__main__":
-    main()
+    # 读取 & 清洗
+    try:
+        main()
+    except Exception as e:
+        report_exception(e, "system error！")
+    
