@@ -19,6 +19,30 @@ from datetime import datetime, timedelta
 import json
 import gc
 import os
+import os, sys, io, logging, traceback, streamlit as st
+
+# 让前端显示详细错误
+st.set_option("client.showErrorDetails", True)
+
+# 收敛线程占用，避免 Cloud 资源紧绷导致中断
+os.environ.setdefault("OMP_NUM_THREADS", "1")
+os.environ.setdefault("OPENBLAS_NUM_THREADS", "1")
+os.environ.setdefault("MKL_NUM_THREADS", "1")
+
+# 简单的异常上报工具
+def report_exception(e: Exception, where: str = ""):
+    tb = traceback.format_exc()
+    st.error(f"❌ {where} 失败：{e}")
+    st.code(tb, language="python")
+    # 打到 cloud 日志
+    logging.getLogger("stock_dashboard").exception("%s failed", where)
+    # 提供下载
+    st.download_button(
+        "下载 last_error.txt",
+        data=tb.encode("utf-8"),
+        file_name="last_error.txt",
+        mime="text/plain",
+    )
 
 # —— 强制限制数值库的并行线程，避免过度占用 CPU/内存 ——
 os.environ.setdefault("OMP_NUM_THREADS", "1")
