@@ -23,12 +23,12 @@ import os, sys, io, logging, traceback, streamlit as st
 
 import os
 # ---- limit threads to avoid Cloud kill ----
-os.environ["OMP_NUM_THREADS"] = "1"
-os.environ["OPENBLAS_NUM_THREADS"] = "1"
-os.environ["MKL_NUM_THREADS"] = "1"
-os.environ["VECLIB_MAXIMUM_THREADS"] = "1"
-os.environ["NUMEXPR_NUM_THREADS"] = "1"
-os.environ["XGBOOST_NUM_THREADS"] = "1"  # 兼容 xgboost
+# os.environ["OMP_NUM_THREADS"] = "1"
+# os.environ["OPENBLAS_NUM_THREADS"] = "1"
+# os.environ["MKL_NUM_THREADS"] = "1"
+# os.environ["VECLIB_MAXIMUM_THREADS"] = "1"
+# os.environ["NUMEXPR_NUM_THREADS"] = "1"
+# os.environ["XGBOOST_NUM_THREADS"] = "1"  # 兼容 xgboost
 
 # 简单的异常上报工具
 def report_exception(e: Exception, where: str = ""):
