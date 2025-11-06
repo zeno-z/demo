@@ -725,8 +725,9 @@ def main():
             st.subheader("🤖 Model Selection")
             models = st.multiselect(
                 "Select models to train/use",
-                ["XGBoost", "LSTM Base", "Residual-Anchor-LSTM", "Stable-LSTM", 
-                 "Attentive-Gated-LSTM", "MC-Enhanced-LSTM"],
+                # , "Residual-Anchor-LSTM", "Stable-LSTM", 
+                #  "Attentive-Gated-LSTM", "MC-Enhanced-LSTM"
+                ["XGBoost", "LSTM Base"],
                 default=["XGBoost"]
             )
             
